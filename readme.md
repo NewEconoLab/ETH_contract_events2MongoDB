@@ -4,7 +4,7 @@ Real-time ETH contract events (including historical) into the library mongodb
 
 ## init & starts
 
-```
+```bash
 npm install (yarn)
 node app.js
 ```
