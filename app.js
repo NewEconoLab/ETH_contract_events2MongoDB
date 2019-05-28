@@ -23,10 +23,27 @@ var uri = sysConfigInfos.mongoDBurl;
 
 app.get('/', async (req, res) => {
     // res.send(JSON.stringify(await web3.eth.getBlockNumber()))
-    res.send(JSON.stringify(await contract.getPastEvents('allEvents',{
-        fromBlock: 0,
-        toBlock: 'latest'
-    })))
+    var blockNumber = await web3.eth.getBlockNumber();   
+    var isSyncing = await web3.eth.isSyncing();
+    var netGetId = await web3.eth.net.getId();
+    var netIsListening = await web3.eth.net.isListening();
+    var netGetPeerCount = await web3.eth.net.getPeerCount();
+    var contractWatch = [];
+    contractInfos.forEach(contractInfo => {
+        contractWatch.push({
+            contractName:contractInfo.contractName,
+            contractHash:contractInfo.contractHash
+        });
+    });
+    res.send(JSON.stringify({     
+        "contractWatch":contractWatch,
+        "web3Providers":sysConfigInfos.Web3ProviderURL,
+        "getBlockNumber":blockNumber,
+        "isSyncing":isSyncing,
+        "net.getId" : netGetId,
+        "netIsListening":netIsListening,
+        "netGetPeerCount":netGetPeerCount,
+    }));
 });
 
 app.listen(3000, async () => {
